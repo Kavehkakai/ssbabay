@@ -27,3 +27,7 @@ npm run dev
 
 ## QR Code
 پس از انتشار، QR باید به URL نهایی سایت اشاره کند. همگام‌سازی را پیش از رویداد با دو گوشی آزمایش کن.
+
+
+## انتشار خودکار در GitHub Pages
+مخزن از Workflow موجود در `.github/workflows/deploy.yml` برای انتشار استفاده می‌کند. در تنظیمات مخزن، GitHub Pages را از بخش **Settings → Pages → Build and deployment → Source: GitHub Actions** فعال کنید. برای فعال‌شدن داده‌های مشترک، دو Repository Secret با نام‌های `VITE_SUPABASE_URL` و `VITE_SUPABASE_ANON_KEY` تنظیم کنید؛ سپس هر Push به شاخهٔ `main` سایت را می‌سازد و منتشر می‌کند.
