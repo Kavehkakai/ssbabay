@@ -41,3 +41,25 @@ create policy "public submit quiz entries" on public.quiz_entries for insert to 
 do $$ begin alter publication supabase_realtime add table public.votes; exception when duplicate_object then null; end $$;
 do $$ begin alter publication supabase_realtime add table public.wishes; exception when duplicate_object then null; end $$;
 do $$ begin alter publication supabase_realtime add table public.quiz_entries; exception when duplicate_object then null; end $$;
+
+-- Admin access: create the Auth user first, then insert that user's UUID below.
+create table if not exists public.admin_users (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.admin_users enable row level security;
+drop policy if exists "admins can read own admin membership" on public.admin_users;
+create policy "admins can read own admin membership"
+  on public.admin_users for select to authenticated
+  using (auth.uid() = user_id);
+
+-- Destructive actions are restricted to users explicitly listed in admin_users.
+drop policy if exists "admins can delete votes" on public.votes;
+create policy "admins can delete votes" on public.votes for delete to authenticated
+  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+drop policy if exists "admins can delete wishes" on public.wishes;
+create policy "admins can delete wishes" on public.wishes for delete to authenticated
+  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+drop policy if exists "admins can delete quiz entries" on public.quiz_entries;
+create policy "admins can delete quiz entries" on public.quiz_entries for delete to authenticated
+  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
