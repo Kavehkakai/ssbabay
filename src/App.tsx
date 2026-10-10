@@ -4,9 +4,10 @@ import { createClient } from '@supabase/supabase-js'
 type Vote = { id:string; name:string; team:'boy'|'girl'; weight:number; day:number; babyName:string }
 type Wish = { id:string; name:string; message:string }
 type Entry = { id:string; name:string; score:number }
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
-const db = url && key ? createClient(url,key) : null
+// These are public browser credentials. Keep privileged service-role keys out of this file.
+const url = (import.meta.env.VITE_SUPABASE_URL as string | undefined) || 'https://jlaksmssscjhbntwenjv.supabase.co'
+const key = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || 'sb_publishable_Br0Eg5rSx-HigV2glMl1eQ_SbHvD-zj'
+const db = createClient(url, key)
 const questions = [
  ['چه کسی احتمالاً زودتر با گریهٔ کوچولو بیدار می‌شود؟',0],
  ['چه کسی بیشتر برای کوچولو خرید می‌کند؟',1],
