@@ -61,7 +61,6 @@ export default function App() {
 }
 function Heading({icon,title,sub}:{icon:string;title:string;sub:string}){return <div className="section-heading"><span className="icon">{icon}</span><div><h2>{title}</h2><p>{sub}</p></div></div>}
 
-type AdminRecord = { id: string; name: string; [key: string]: unknown }
 function AdminPanel({db}:{db:SupabaseClient}) {
  const [username,setUsername]=useState('admin'),[password,setPassword]=useState('')
  const [userId,setUserId]=useState<string|null>(null),[checking,setChecking]=useState(true)
